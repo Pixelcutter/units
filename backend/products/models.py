@@ -25,7 +25,7 @@ class Product(models.Model):
     productobjects = ProductObjects()  # custom manager
 
     class Meta:
-        ordering = ("-created_at",)
+        ordering = ("created_at",)
         constraints = [
             models.UniqueConstraint(
                 fields=["name", "product_owner"], name="unique_product_name_owner"
