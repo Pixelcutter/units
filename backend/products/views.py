@@ -1,25 +1,25 @@
 from rest_framework import generics
 from .models import Product
 from .serializers import ProductSerializer
+from units_api.mixins import UserIsOwnerMixin
 import logging
 
 logger = logging.getLogger("debug_to_stdout")
 
 
-class ProductList(generics.ListCreateAPIView):
+class ProductList(UserIsOwnerMixin, generics.ListCreateAPIView):
     serializer_class = ProductSerializer
+    queryset = Product.objects.all()
 
-    def get_queryset(self):
-        # queryset = Product.objects.filter(product_owner=self.request.user.id)
-        queryset = Product.objects.all()
+    # save Product.owner_id as authenticated user.id
+    def perform_create(self, serializer):
+        serializer.save(owner_id=self.request.user)
 
-        for_sale_filter = self.request.query_params.get("for_sale", None)
-        if for_sale_filter is not None:
-            queryset = queryset.filter(for_sale=for_sale_filter)
-
-        return queryset
+    # confirm authenticated user is owner of product and category (maybe)
 
 
 class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Product.productobjects.all()
+    queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+    # confirm authenticated user is owner of product and category (maybe)

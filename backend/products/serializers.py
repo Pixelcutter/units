@@ -10,7 +10,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "name",
             "description",
             "category",
-            "product_owner",
+            "owner_id",
             "quantity",
             "for_sale",
             "price",
