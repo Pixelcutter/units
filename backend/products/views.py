@@ -12,8 +12,8 @@ class ProductList(UserIsOwnerMixin, generics.ListCreateAPIView):
     queryset = Product.objects.all()
 
     # save Product.owner_id as authenticated user.id
-    def perform_create(self, serializer):
-        serializer.save(owner_id=self.request.user)
+    # def perform_create(self, serializer):
+    #     serializer.save(owner_id=self.request.user)
 
     # confirm authenticated user is owner of product and category (maybe)
 
