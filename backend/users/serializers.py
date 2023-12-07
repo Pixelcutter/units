@@ -6,14 +6,20 @@ logger = logging.getLogger("debug_to_stdout")
 
 
 class UnitsUserSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
-    password = serializers.CharField(write_only=True, required=True)
-
     class Meta:
         model = UnitsUser
-        fields = ["id", "username", "email", "password", "about", "first_name", "last_name"]
+        fields = [
+            "id",
+            "username",
+            "email",
+            "password",
+            "about",
+            "first_name",
+            "last_name",
+        ]
+
+        extra_kwargs = {"password": {"write_only": True}, "id": {"read_only": True}}
 
     def create(self, validated_data):
         user = UnitsUser.objects.create_user(**validated_data)
-        logger.debug(f"created user: {user.id} {user.username} {user.email} {user.password}")
         return user
