@@ -23,7 +23,6 @@ class CustomUnitsUserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, username=username, **extra_fields)
         user.set_password(password)
-        logger.debug(f"User: {user}")
         user.save()
         return user
 

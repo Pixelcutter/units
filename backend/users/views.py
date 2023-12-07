@@ -2,6 +2,7 @@ from rest_framework import generics
 from .models import UnitsUser
 from .serializers import UnitsUserSerializer
 import logging
+from rest_framework.response import Response
 
 logger = logging.getLogger("debug_to_stdout")
 
@@ -12,4 +13,5 @@ class RegisterUserView(generics.CreateAPIView):
     def perform_create(self, serializer):
         serializer = self.get_serializer(data=self.request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        user = serializer.save()
+        return user
