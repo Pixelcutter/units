@@ -1,17 +1,26 @@
 from rest_framework import generics
 from .models import Category
 from .serializers import CategorySerializer
+import logging
+
+logger = logging.getLogger("debug_to_stdout")
+
+
+class CreateCategoryView(generics.CreateAPIView):
+    serializer_class = CategorySerializer
+
+    def perform_create(self, serializer):
+        serializer.validated_data["owner_id"] = self.request.user
+        return super().perform_create(serializer)
 
 
 class CategoryList(generics.ListCreateAPIView):
-    # queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
     def get_queryset(self):
-        owner_id = self.request.GET.get("owner_id", None)
-        queryset = Category.objects.filter(category_owner=owner_id)
-        # params = "query params:" + self.request.GET.get("name", "-- nope --")
-        # logger.debug(params)
+        owner_id = self.request.user.id
+        queryset = Category.objects.filter(owner=owner_id)
+
         return queryset
 
 

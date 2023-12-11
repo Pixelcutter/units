@@ -7,7 +7,10 @@ class IsOwnerPermission(permissions.BasePermission):
 
 
 class IsUserPermission(permissions.BasePermission):
-    """Permission that checks if authenticated user is user being requested"""
+    """Permission that checks if authenticated user is the user being requested"""
 
     def has_object_permission(self, request, view, obj):
         return obj.id == request.user.id
+
+    def has_permission(self, request, view):
+        return request.user.id == int(view.kwargs["pk"])

@@ -9,14 +9,8 @@ class CategorySerializer(serializers.ModelSerializer):
             "id",
             "name",
             "description",
-            "category_owner",
+            "owner_id",
             "color_hexcode",
         )
 
-        validators = [
-            serializers.UniqueTogetherValidator(
-                queryset=Category.objects.all(),
-                fields=["name", "category_owner"],
-                message="You already have a category with this name.",
-            )
-        ]
+        extra_kwargs = {"id": {"read_only": True}}
