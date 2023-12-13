@@ -1,5 +1,7 @@
-from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 from .models import Category
+from django.db import IntegrityError
+from rest_framework import serializers
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -14,3 +16,12 @@ class CategorySerializer(serializers.ModelSerializer):
         )
 
         extra_kwargs = {"id": {"read_only": True}}
+
+    def create(self, validated_data):
+        # catch IntegrityError and raise ValidationError
+        try:
+            return super().create(validated_data)
+        except IntegrityError:
+            raise ValidationError(
+                {"message": "Category name must be unique for each user"}
+            )

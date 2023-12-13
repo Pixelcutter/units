@@ -5,7 +5,7 @@ class UserIsOwnerMixin:
     user_field = "owner_id"
 
     def get_queryset(self, *args, **kwargs):
-        user = self.request.user.id
+        user = self.request.user
         lookup_data = {}
         lookup_data[self.user_field] = user
         qs = super().get_queryset(*args, **kwargs)
