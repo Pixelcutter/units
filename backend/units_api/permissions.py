@@ -4,7 +4,7 @@ import logging
 logger = logging.getLogger("debug_to_stdout")
 
 
-class IsOwnerPermission(permissions.BasePermission):
+class UserIsOwnerPermission(permissions.BasePermission):
     """Permission that checks if authenticated user is the owner of the object being requested or created"""
 
     def has_object_permission(self, request, view, obj):
