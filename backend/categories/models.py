@@ -13,11 +13,11 @@ class Category(models.Model):
 
     class Meta:
         ordering = ("-created_at",)
-        constraints = [
-            models.UniqueConstraint(
-                fields=["name", "owner_id"], name="unique_category_name_owner"
-            )
-        ]
+        # constraints = [
+        #     models.UniqueConstraint(
+        #         fields=["name", "owner_id"], name="unique_category_name_owner"
+        #     )
+        # ]
 
     def __str__(self):
         return self.name

@@ -8,20 +8,13 @@ import logging
 logger = logging.getLogger("debug_to_stdout")
 
 
-class CreateCategoryView(generics.CreateAPIView):
-    serializer_class = CategorySerializer
-
-    def perform_create(self, serializer):
-        serializer.validated_data["owner_id"] = self.request.user
-        return super().perform_create(serializer)
-
-
-class CategoryList(UserIsOwnerMixin, generics.ListCreateAPIView):
+class CategoryListCreateView(UserIsOwnerMixin, generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = [IsOwnerPermission]
 
 
-class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
+class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [IsOwnerPermission]
