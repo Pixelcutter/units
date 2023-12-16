@@ -13,9 +13,11 @@ class UserIsOwnerPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         # Catch POST requests that have an owner_id that does not match the authenticated user
         if "owner_id" in request.data:
-            self.message = "owner_id field does not match authenticated user"
-            return request.user.id == request.data["owner_id"]
-        return True
+            self.message = f"owner_id field does not match authenticated user id"
+            return request.user.id == int(request.data["owner_id"])
+
+        # Fall back to checking if user is authenticated
+        return bool(request.user and request.user.is_authenticated)
 
 
 class IsUserPermission(permissions.BasePermission):

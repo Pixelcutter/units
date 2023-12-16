@@ -55,4 +55,4 @@ class UnitsUser(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ["username"]
 
     def __str__(self):
-        return f"{self.username} {self.email} {self.password}"
+        return f"id: {self.id}, username: {self.username}, email: {self.email}"
