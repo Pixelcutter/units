@@ -16,3 +16,12 @@ class ProductSerializer(serializers.ModelSerializer):
             "price",
             "image_url",
         )
+
+        extra_kwargs = {"id": {"read_only": True}}
+        validators = [
+            serializers.UniqueTogetherValidator(
+                queryset=Product.objects.all(),
+                fields=["name", "owner_id"],
+                message="Product name must be unique for each user",
+            )
+        ]

@@ -1,39 +1,16 @@
 from rest_framework.reverse import reverse
-from rest_framework.test import APITestCase, APIClient
+from rest_framework.test import APITestCase
 from rest_framework import status
-from users.models import UnitsUser
-from rest_framework_simplejwt.tokens import RefreshToken
-from faker import Faker
-import logging
-
-logger = logging.getLogger("debug_to_stdout")
-fake = Faker()
-
-
-class Helpers:
-    @staticmethod
-    def get_authenticated_client(user):
-        access_token = RefreshToken.for_user(user).access_token
-        client = APIClient()
-        client.credentials(HTTP_AUTHORIZATION=f"Bearer {access_token}")
-
-        return client
-
-    @staticmethod
-    def get_user():
-        user = UnitsUser.objects.create_user(
-            email=fake.email(), username=fake.first_name(), password="testpassword"
-        )
-
-        return user
+from units_api.test_helper import TestHelper
 
 
 class CategoryAPIViewTests(APITestCase):
     categories_url = reverse("units_api:categories:category-list-create")
+    helper = TestHelper()
 
     def setUp(self):
-        self.user = Helpers.get_user()
-        self.client = Helpers.get_authenticated_client(self.user)
+        self.user = self.helper.get_user()
+        self.client = self.helper.get_authenticated_client(self.user)
 
     def test_create_category(self):
         data = {
@@ -168,8 +145,8 @@ class CategoryAPIViewTests(APITestCase):
 
         response = self.client.post(self.categories_url, data=data)
 
-        user2 = Helpers.get_user()
-        client2 = Helpers.get_authenticated_client(user2)
+        user2 = self.helper.get_user()
+        client2 = self.helper.get_authenticated_client(user2)
         data["owner_id"] = user2.id
         response = client2.post(self.categories_url, data=data)
 

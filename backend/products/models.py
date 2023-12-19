@@ -14,7 +14,7 @@ class Product(models.Model):
         get_user_model(), on_delete=models.CASCADE, blank=True, null=True
     )
     quantity = models.IntegerField(default=0)
-    for_sale = models.BooleanField(default=True)
+    for_sale = models.BooleanField(default=False)
     price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(default=timezone.now)
@@ -23,11 +23,6 @@ class Product(models.Model):
 
     class Meta:
         ordering = ("created_at",)
-        constraints = [
-            models.UniqueConstraint(
-                fields=["name", "owner_id"], name="unique_product_name_owner"
-            )
-        ]
 
     def __str__(self):
         return self.name
