@@ -19,6 +19,9 @@ env = environ.Env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Read environment variables from .env file
+environ.Env.read_env(BASE_DIR / ".env")
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -191,7 +194,7 @@ if USE_S3:
     AWS_SECRET_ACCESS_KEY = env("S3_SECRET_ACCESS_KEY")
     AWS_STORAGE_BUCKET_NAME = env("S3_BUCKET_NAME")
     AWS_S3_ENDPOINT_URL = env("S3_HOST")
-    MEDIA_URL = f"{AWS_S3_ENDPOINT_URL}media/"
+    MEDIA_URL = f"{AWS_S3_ENDPOINT_URL}/media/"
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 else:
     DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
