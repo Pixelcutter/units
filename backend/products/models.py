@@ -4,6 +4,10 @@ from django.utils import timezone
 from categories.models import Category
 
 
+def get_upload_path(instance, filename):
+    return f"products/images/{str(instance.owner_id.id)}/{filename}"
+
+
 class Product(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField(blank=True, null=True)
@@ -18,7 +22,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(default=timezone.now)
-    image_url = models.URLField(blank=True, null=True)
+    image = models.ImageField(upload_to=get_upload_path, blank=True, null=True)
     objects = models.Manager()  # default manager
 
     class Meta:

@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import environ
+
+env = environ.Env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -180,3 +183,17 @@ SIMPLE_JWT = {
 }
 
 AUTH_USER_MODEL = "users.UnitsUser"
+
+
+USE_S3 = env.bool("USE_S3", default=False)
+if USE_S3:
+    AWS_ACCESS_KEY_ID = env("S3_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = env("S3_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = env("S3_BUCKET_NAME")
+    AWS_S3_ENDPOINT_URL = env("S3_HOST")
+    MEDIA_URL = f"{AWS_S3_ENDPOINT_URL}media/"
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+else:
+    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = BASE_DIR / "media"
